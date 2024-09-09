@@ -1,0 +1,83 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="icon" type="image/x-icon" href="/static/images/logo1.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/customer.css') }}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+    {% include 'nav2.html' %}
+
+    <div class="container">
+        <h1>Search Customer Details</h1>
+        <form action="{{ url_for('customer_detail') }}" method="POST">
+            <input type="text" name="query" placeholder="Search by Order No or Phone No">
+            <button type="submit" style="height: 42px;position: relative;">Search</button>
+        </form>
+        
+        {% if results %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Order No</th>
+                    <th>Name</th>
+                    <th>Phone No</th>
+                    <th>Start Date</th>
+                    <th>Product</th>
+                    <th>Description</th>
+                    <th>Total</th>
+                    <th>Details</th>
+                    <th>edit</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                    {% for product_detail in result.product_details %}
+                    <tr>
+                        <td>{{ result.order_id }}</td>
+                        <td>{{ result.name }}</td>
+                        <td>{{ result.phone_no }}</td>
+                        <td>{{ result.start_date }}</td>
+                        <td>{{ product_detail.product }}</td>
+                        <td>{{ product_detail.description }}</td>
+                        <td>{{ product_detail.Price }}</td>
+                        <td>
+                            <a href="{{ url_for('display', order_id=result.order_id) }}" class="details-link">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('edit_order', order_id=result.order_id) }}" class="details-link">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="no-results">No results found for "{{ query }}".</p>
+        {% endif %}
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.container');
+            container.classList.add('animate-once');
+        });
+        function toggleDropdown() {
+            document.querySelector('.admin').classList.toggle('active');
+        }
+    </script>
+</body>
+</html> 
+
+

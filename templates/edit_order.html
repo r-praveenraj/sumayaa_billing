@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/images/logo1.png">
+    <title>Edit Order</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 10px;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="date"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-out;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Order</h1>
+        <form action="{{ url_for('edit_order', order_id=order_data.order_id) }}" method="POST">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="{{ order_data.name }}">
+
+            <label for="phone_no">Phone No:</label>
+            <input type="text" id="phone_no" name="phone_no" value="{{ order_data.phone_no }}">
+
+            <label for="phone_no">Payable Amount:</label>
+            <input type="text" id="payable_amount" name="payable_amount" oninput="updateAmounts()" value="{{ order_data.payable_amount}}">
+   
+
+            <label for="cash_amount">Cash Amount:</label>
+            <input type="number" id="cash_amount" name="cash_amount" oninput="updateAmounts()" value="{{ order_data.cash_amount }}">
+
+            <label for="upi_amount">UPI Amount:</label>
+            <input type="number" id="upi_amount" name="upi_amount" oninput="updateAmounts()" value="{{ order_data.upi_amount }}">
+
+          
+
+            <label for="balance_amount">Balance Amount:</label>
+            <input type="number" id="balance_amount" name="balance_amount" oninput="updateAmounts()" value="{{ order_data.balance_amount }}">
+
+            <!-- Add inputs for product details if needed -->
+            <!-- Add inputs for prescription details if needed -->
+
+            <button type="submit">Update Order</button>
+        </form>
+    </div>
+    <script>
+   document.addEventListener('DOMContentLoaded', function() {
+    function updateAmounts() {
+        // Assuming totalprices, totaldiscount, and total have already been calculated elsewhere in your code
+        
+
+        // Retrieve the payable amount, cash amount, and UPI amount
+        let payableAmount = parseFloat(document.querySelector('input[name="payable_amount"]').value) || 0;
+        let cashAmount = parseFloat(document.querySelector('input[name="cash_amount"]').value) || 0;
+        let upiAmount = parseFloat(document.querySelector('input[name="upi_amount"]').value) || 0;
+
+        // Calculate the balance amount
+        let balanceAmount = payableAmount - (cashAmount + upiAmount);
+
+        // Update the balance amount field
+        document.querySelector('input[name="balance_amount"]').value = balanceAmount.toFixed(2);
+    }
+
+    // Add event listeners to recalculate the balance whenever cash or UPI amount changes
+    
+});
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/images/logo.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/billing.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <title>Billing</title>
+</head>
+
+<body>
+    {% include 'navbar.html' %}
+    {% include 'nav2.html' %}
+    <form action="/submit" method="POST">
+
+        <div class="container">
+            <!-- <h1>Billing Page</h1> -->
+            <h3>Customer Details</h3>
+            
+            {% if error_message %}
+<p id="message" class="error-message">{{ error_message }}</p>
+{% endif %}
+
+{% if success_message %}
+<p id="message" class="success-message">{{ success_message }}</p>
+{% endif %}
+
+            <div class="row">
+                <div class="side">
+                    <label for="orderNo">Order No</label>
+                    <input type="text" id="orderNo" value="{{ order_no }}" name="orderNo" required>
+                </div>
+                <div class="side">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="side">
+                    <label for="phoneNo">Phone No</label>
+                    <input type="text" id="phoneNo" name="phoneNo" required>
+                </div>
+                <div class="side">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" required>
+                    <!-- <textarea id="address" name="address" rows="2"></textarea> -->
+                </div>
+            </div>
+            <div class="row-2">
+                <div class="side">
+                    <label for="startDate">Purchase Date</label>
+                    <input type="datetime-local" id="startDate" name="startDate" required>
+                </div>
+                <div class="side">
+                    <label for="endDate">Due Date</label>
+                    <input type="date" id="endDate" name="endDate" required>
+                </div>
+            </div>
+    
+            <h3>Product Details</h3>
+            <table id="dynamicTable">
+                <thead>
+                    <tr>
+                        <th>Barcode</th>
+                        <th>Product</th>
+                        <th>Product Code</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Colour</th>
+                        <th>Item price</th>
+                        <th>Discount</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" name="column1" oninput="fetchProductDetails(this)" required></td>
+                        <td class="input-col">
+                            <select name="column2">
+                                <option value="frame">Frame</option>
+                                <option value="lens">Lens</option>
+                                <!-- <option value="option3">Option 3</option>
+                                <option value="option4">Option 4</option> -->
+                            </select>
+                        </td>
+                        <td><input type="text" name="column3" required></td>
+                        <td style="width: 150px;"><input type="text" name="column4" required></td>
+                        <td><input type="text" name="column5" oninput="calculateTotal()" required></td>
+                        <td><input type="text" name="column10" required></td>
+                        <td><input type="text" name="column6" oninput="calculateTotal()" required></td>
+                        <td><input type="text" name="column7" oninput="calculateTotal()" required></td>
+                        <td><input type="text" name="column8" oninput="calculateTotal()" required></td>
+                    </tr>
+                    
+                </tbody>
+               
+            </table>
+            <div class="add-row" style="position: relative;" onclick="addRow()">Add Row</div>
+
+<h3>Prescription</h3>
+<div class="container5" style="position: relative; width: 100%;">
+    <div class="down" style="width: 60%; height: 100px; float: left;margin-top: -25px;">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="1"></th>
+                    <th colspan="3">Right Eye</th>
+                    <th colspan="3">Left Eye</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td>SPH</td>
+                    <td>CYL</td>
+                    <td>Axis</td>
+                    <td>SPH</td>
+                    <td>CYL</td>
+                    <td>Axis</td>
+                </tr>
+                <tr>
+                    <td>DV</td>
+                    <td><input type="text" name="dv_right_sph" required></td>
+                    <td><input type="text" name="dv_right_cyl" required></td>
+                    <td><input type="text" name="dv_right_axis" required></td>
+                    <td><input type="text" name="dv_left_sph" required></td>
+                    <td><input type="text" name="dv_left_cyl" required></td>
+                    <td><input type="text" name="dv_left_axis" required></td>
+                </tr>
+                <tr>
+                    <td>NV</td>
+                    <td><input type="text" name="nv_right_sph" required></td>
+                    <td><input type="text" name="nv_right_cyl" required></td>
+                    <td><input type="text" name="nv_right_axis" required></td>
+                    <td><input type="text" name="nv_left_sph" required></td>
+                    <td><input type="text" name="nv_left_cyl" required></td>
+                    <td><input type="text" name="nv_left_axis" required></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="rightside" style="position: relative; width: 37%;float: right;margin-top: -25px;">
+        <!-- <br>
+        <br> -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Payment pending amount</th>
+                </tr>
+            </thead>
+            <tbody class="bord">
+                <tr>
+                    <td class="heading-col">Total Sales</td>
+                    <td class="input-col"><input type="text" name="total_sales" id="totalPrice" placeholder="Enter Total Sales" oninput="calculateTotal()"></td>
+                </tr>
+                <tr>
+                    <td class="heading-col">Discount Amount</td>
+                    <td class="input-col"><input type="text" name="discount_amount" placeholder="Enter Discount Amount" oninput="calculateTotal()"></td>
+                </tr>
+                <tr>
+                    <td class="heading-col">Payable Amount</td>
+                    <td class="input-col"><input type="text" name="payable_amount" placeholder="Enter Payable Amount" oninput="calculateTotal()"></td>
+                </tr>
+                <tr>
+                    <td class="heading-col">Cash Amount</td>
+                    <td class="input-col"><input type="text" name="cash_amount" placeholder="Enter Cash Amount" oninput="calculateTotal()"></td>
+                </tr>
+                <tr>
+                    <td class="heading-col">UPI / Card Amount</td>
+                    <td class="input-col"><input type="text" name="UPI_amount" placeholder="Enter UPI Amount" oninput="calculateTotal()"></td>
+                </tr>
+                <tr>
+                    <td class="heading-col">Balance Amount</td>
+                    <td class="input-col"><input type="text" name="balance_amount" placeholder="Enter Balance Amount" oninput="calculateTotal()"></td>
+                </tr>
+            </tbody>
+        </table>
+        <button style="width: 115px;float: inline-end;" onclick="submitForm()">Submit</button>
+    </div>
+</div>
+</div>
+
+    <script>
+         document.addEventListener('DOMContentLoaded', function () {
+    const message = document.getElementById('message');
+    if (message) {
+        message.style.display = 'block';
+        setTimeout(() => {
+            message.classList.add('fade-out');
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 1000); // Match the transition duration
+        }, 3000); // Time before fading out starts
+    }
+});
+
+         document.addEventListener('DOMContentLoaded', function() {
+            function formatDateToLocalString(date) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                return `${year}-${month}-${day}T${hours}:${minutes}`;
+            }
+            function formatDateToDateString(date) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            const now = new Date();
+            startDateInput.value = formatDateToLocalString(now);
+            startDateInput.addEventListener('input', function() {
+                const startDate = new Date(this.value);
+                if (isNaN(startDate.getTime())) return;
+
+                const dueDate = new Date(startDate);
+                dueDate.setFullYear(dueDate.getFullYear() + 1);
+                const formattedDate = formatDateToDateString(dueDate);
+                endDateInput.value = formattedDate;
+            });
+            startDateInput.dispatchEvent(new Event('input'));
+        });
+
+        function toggleDropdown() {
+            document.querySelector('.admin').classList.toggle('active');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.admin')) {
+                document.querySelector('.admin').classList.remove('active');
+            }
+        });
+
+        // setTimeout(function() {
+        //     var messageElement = document.getElementById('message');
+        //     var fadeEffect = setInterval(function () {
+        //         // if (!messageElement.style.opacity) {
+        //         //     messageElement.style.opacity = 1;
+        //         // }
+        //         if (messageElement.style.opacity > 0) {
+        //             messageElement.style.opacity -= 0.05;
+        //         } else {
+        //             clearInterval(fadeEffect);
+        //         }
+        //     }, 50);
+        // }, 3000);
+
+    function addRow() {
+        const table = document.getElementById('dynamicTable').getElementsByTagName('tbody')[0];
+        const newRow = table.rows[0].cloneNode(true);
+        const inputs = newRow.getElementsByTagName('input');
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].value = '';
+        }
+        table.appendChild(newRow);
+    }
+
+    function printPage() {
+        var elementsToHide = document.querySelectorAll('body > :not(.container)');
+        elementsToHide.forEach(function(element) {
+            element.style.display = 'none';
+        });
+        var container = document.querySelector('.container');
+        container.style.maxWidth = '100%';
+        window.print();
+        elementsToHide.forEach(function(element) {
+            element.style.display = '';
+        });
+        container.style.maxWidth = '';
+    }
+
+    function calculateTotal() {
+        let total = 0;
+        let totaldiscount=0;
+        let totalprices=0;
+        const rows = document.querySelectorAll('#dynamicTable tbody tr');
+        rows.forEach(row => {
+            const itemPrice = parseFloat(row.querySelector('input[name="column6"]').value) || 0;
+            const quantity = parseFloat(row.querySelector('input[name="column5"]').value) || 0;
+            const discount = parseFloat(row.querySelector('input[name="column7"]').value) || 0;
+            const price = itemPrice * quantity - discount;
+            row.querySelector('input[name="column8"]').value = price.toFixed(2);
+            totalprices+=itemPrice;
+            total += price;
+            totaldiscount +=discount
+        });
+
+       
+        document.querySelector('input[name="total_sales"]').value = totalprices.toFixed(2);
+        document.querySelector('input[name="discount_amount"]').value = totaldiscount.toFixed(2);
+        document.querySelector('input[name="payable_amount"]').value = total.toFixed(2);
+        // const totalSales = parseFloat(document.getElementById('totalSales').value) || 0;
+        let payableAmount = parseFloat(document.querySelector('input[name="payable_amount"]').value) || 0;
+       
+        let cashAmount = parseFloat(document.querySelector('input[name="cash_amount"]').value) || 0;
+        let upiAmount = parseFloat(document.querySelector('input[name="UPI_amount"]').value) || 0;
+        
+
+        let balanceAmount = total - (cashAmount + upiAmount  );
+
+        document.querySelector('input[name="balance_amount"]').value = balanceAmount.toFixed(2);
+    }
+
+    function fetchProductDetails(element) {
+    var row = element.closest('tr');
+    var barcode = row.querySelector('input[name="column1"]').value;
+
+    if (barcode.length > 0) {
+        fetch(`/get-product-details?barcode=${barcode}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Received data:', data);
+                if (data && Object.keys(data).length > 0) {
+                    row.querySelector('input[name="column3"]').value = data.Product_Code;
+                    row.querySelector('input[name="column4"]').value = data.Description;
+                    row.querySelector('input[name="column5"]').value = data.Quantity;
+                    row.querySelector('input[name="column6"]').value = data.Price;
+                } else {
+                    console.log("No data received or product not found.");
+                }
+            })
+            .catch(error => console.error('Error fetching product details:', error));
+    }
+}
+
+
+
+
+    </script>
+</body>
+</html>

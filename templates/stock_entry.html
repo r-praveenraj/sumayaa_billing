@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Entry</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="/static/images/logo1.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stock.css') }}">
+    
+    <script>
+        function toggleSearch() {
+            document.getElementById('add-stock').style.display = 'none';
+            document.getElementById('search-stock').style.display = "block";
+        }
+
+        function resetForm() {
+            document.getElementById('search-form').reset();
+            document.getElementById('add-stock').style.display = 'block';
+            document.getElementById('search-stock').style.display = 'none';
+        }
+    </script>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    {% include 'nav2.html' %}
+    <div class="container">
+        <div class="form-container">
+            <div class="left-section">
+                <h3 style="text-align: center;">Stock Entry</h3>
+                {% if stock_success_message %}
+                    <p id="stockMessage" class="success-message">{{ stock_success_message }}</p>
+                {% endif %}
+
+                <div id="add-stock">
+                    <form action="{{ url_for('stock_entry') }}" method="POST">
+                        <input type="text" name="barcode" placeholder="Barcode" required>
+                        <input type="text" name="brand" placeholder="Brand" required>
+                        <input type="text" name="model_no" placeholder="Model No" required>
+                        <select name="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Unisex">Unisex</option>
+                        </select>
+                        <input type="text" name="description" placeholder="Description">
+                        <input type="number" name="quantity" placeholder="Quantity" required>
+                        <input type="text" name="color" placeholder="Color" required>
+                        <input type="text" name="price" placeholder="Price" required>
+                        <button type="submit">Add Stock</button>
+                    </form>
+                </div>
+            </div>
+            <div class="right-section" style='position: relative; right: 5%;'>
+                <div id="search-stock">
+                    <!-- <h3 style="text-align: start; max-width: 30%;">Search Stock</h3> -->
+                    <form id="search-form" action="{{ url_for('stock_entry') }}" method="GET">
+                        <span><h3 style="text-align: start; max-width: 30%;">Search Stock</h3></span>
+                        <!-- <label for="search">Search Stock</label> -->
+                        <input style="margin-top: -60px;margin-left: 330px;" type="text" id="search" name="search" placeholder="Search by Barcode, Brand, or Product Code">
+                    </form>
+                </div>
+                {% if stock_entries %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Barcode</th>
+                                <th>Brand</th>
+                                <th>Model No</th>
+                                <th>Gender</th>
+                                <th>Quantity</th>
+                                <th>Color</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stockEntries">
+                            {% for entry in stock_entries %}
+                                <tr>
+                                    <td>{{ entry.S_No }}</td>
+                                    <td>{{ entry.Barcode }}</td>
+                                    <td>{{ entry.Brand }}</td>
+                                    <td>{{ entry.Product_Code }}</td>
+                                    <td>{{ entry.Gender }}</td>
+                                    <td>{{ entry.Quantity }}</td>
+                                    <td>{{ entry.Colour }}</td>
+                                    <td>{{ entry.Price }}</td>
+                                    <td>
+                                        <a href="{{ url_for('update_entry', id=entry.ID) }}" class="details-link"><i class="fas fa-edit"></i> Edit</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="no-results">No stock entries found.</p>
+                {% endif %}
+
+                <!-- Pagination controls -->
+                {% if total_pages > 1 %}
+                    <div class="pagination">
+                        {% if current_page > 1 %}
+                            <a href="{{ url_for('stock_entry', page=current_page-1, search=search_query) }}">&laquo; Previous</a>
+                        {% endif %}
+                        
+                        {% for page_num in range(1, total_pages + 1) %}
+                            {% if page_num == current_page %}
+                                <span class="current-page"><a href="#">{{ page_num }}</a></span>
+                                <!-- {{page_num}} -->
+                            {% else %}
+                                <a href="{{ url_for('stock_entry', page=page_num, search=search_query) }}">{{ page_num }} </a>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if current_page < total_pages %}
+                            <a href="{{ url_for('stock_entry', page=current_page+1, search=search_query) }}">Next &raquo;</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleDropdown() {
+            document.querySelector('.admin').classList.toggle('active');
+        }
+       document.addEventListener('DOMContentLoaded', function () {
+    // Success message fading out
+    const successMessage = document.getElementById('stockMessage');
+    if (successMessage) {
+        successMessage.style.display = 'block';
+        setTimeout(() => {
+            successMessage.classList.add('fade-out');
+            // Optionally hide the message completely after fading out
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 1000); // This should match the transition duration
+        }, 3000); // Time before fading out starts
+    }
+
+    // AJAX search functionality
+    const searchInput = document.getElementById('search');
+    searchInput.addEventListener('input', function () {
+        const query = searchInput.value;
+        fetch(`/search_stock?query=${encodeURIComponent(query)}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const stockEntriesTable = document.getElementById('stockEntries');
+            stockEntriesTable.innerHTML = '';
+            data.forEach((entry, index) => {
+                const row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${entry.Barcode}</td>
+                        <td>${entry.Brand}</td>
+                        <td>${entry.Product_Code}</td>
+                        <td>${entry.Gender}</td>
+                        <td>${entry.Quantity}</td>
+                        <td>${entry.Colour}</td>
+                        <td>${entry.Price}</td>
+                        <td>
+                            <a href="/update_entry/${entry.ID}" class="details-link"><i class="fas fa-edit"></i> Edit</a>
+                        </td>
+                    </tr>
+                `;
+                stockEntriesTable.insertAdjacentHTML('beforeend', row);
+            });
+        })
+        .catch(error => console.error('Error fetching stock entries:', error));
+    });
+});
+
+    </script>
+</body>
+</html>

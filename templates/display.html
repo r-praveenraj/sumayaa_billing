@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+
+    <link rel="icon" type="image/x-icon" href="./images/logo1.png">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0 10px;
+        }
+        .navbar {
+            width: 100%;
+            background-color: #333;
+            margin-bottom: 5px;
+        }
+        .navbar ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: right;
+        }
+        .navbar ul li {
+            display: inline;
+            padding: 5px;
+        }
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        .navbar ul li a:hover {
+            text-decoration: underline;
+        }
+        .total {
+            background-color: #ffffff;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 5px;
+            background-color: #ffffff;
+        }
+        h1 {
+            margin-top: 5px;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(2, 90, 71, 0.534);
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        p {
+    font-size: 14px; /* Adjust the size as needed */
+     /* Adjust the line height to reduce spacing */
+    margin-left: 40px; /* Remove any default margin */
+}
+
+        h2, h3 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 5px 0;
+            text-align: center;
+        }
+        .imghead {
+            display: flex;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .image img {
+            width: 100px;
+            height: 70px;
+            padding: 5px;
+        }
+        .customer-details, .products, .thanktable {
+            width: 100%;
+            margin: 5px 0;
+        }
+        .details-table {
+            display: flex;
+            justify-content: space-between;
+        }
+        .column {
+            width: 48%;
+        }
+        .row {
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+        .row span {
+            display: inline-block;
+            width: 100px;
+        }
+        .products table, .thanktable table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5px;
+        }
+        .products th, .products td, .thanktable th, .thanktable td {
+            border: 1px solid #ddd;
+            padding: 3px;
+            text-align: left;
+            font-size: 12px;
+        }
+        .thank {
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: block;
+            margin: 10px auto;
+            font-size: 14px;
+        }
+        .divide {
+    display: flex;
+    justify-content: space-between; /* Side-by-side alignment */
+    align-items: center; /* Vertically center-align the content */
+    margin-top: 10px; /* Reduce margin */
+}
+
+.thank {
+    flex: 1; /* Equal width for both thank and thanktable sections */
+    font-size: 14px; /* Reduce font size */
+    margin: 0 10px; /* Reduce margin */
+    text-align: center;
+}
+
+.thank h3 {
+    margin: 0; /* Remove margin */
+    font-size: 16px; /* Adjust the font size */
+}
+
+.thanktable {
+    flex: 1; /* Equal width for both sections */
+    margin: 0 10px; /* Reduce margin */
+    font-size: 14px; /* Reduce font size */
+}
+
+.thanktable table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.thanktable th, .thanktable td {
+    padding: 3px; /* Reduce padding */
+    font-size: 12px; /* Reduce font size in table */
+}
+
+.thanktable th {
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+.thanktable tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+  
+
+        button:hover {
+            background-color: #c82333;
+        }
+        @media print {
+            .navbar, button {
+                display: none;
+            }
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .container {
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="total">
+        <div class="container">
+            <div class="imghead">
+                <div class="image"><img src="{{ url_for('static', filename='images/logo1.png') }}" alt="logo"></div>
+                <div class="billhead">
+                    <h1>SUMAYAA EYE PLUS</h1>
+                    <p >Shop No 226/609, Trichy Main Road, Gugai, Salem - 636006 (Opposite Lakshmi Vilas Bank),<br>
+                        <b>Contact No :  0427-4260075, 9361117846</b>
+                    </p>
+                </div>
+            </div>
+            <div class="customer-details">
+                <h2>Customer Details</h2>
+                <div class="details-table">
+                    <div class="column">
+                        <div class="row"><span>Name&nbsp;&nbsp;&nbsp;:</span><span>{{ summary['Name'] }}</span></div>
+                        <div class="row"><span>Address&nbsp;&nbsp;&nbsp;:</span><span>{{ summary['Address'] }}</span></div>
+                        <div class="row"><span>Phone No&nbsp;&nbsp;:</span><span>{{ summary['PhoneNo'] }}</span></div>
+                    </div>
+                    <div class="column">
+                        <div class="row"><span><b>Order No&nbsp;&nbsp;:</b></span><span>{{ summary['OrderNo'] }}</span></div>
+                        <div class="row"><span>Start Date&nbsp;&nbsp;:</span><span>{{ summary['StartDate'] }}</span></div>
+                        <div class="row"><span>End Date&nbsp;&nbsp;:</span><span>{{ summary['EndDate'] }}</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="products">
+                <h2>Products</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Barcode</th>
+                            <th>Product</th>
+                            <th>Product Code</th>
+                            <th>Description</th>
+                            <th>Quality</th>
+                            <th>Colour</th>
+                            <th>Discount</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td>{{ product['Barcode'] }}</td>
+                            <td>{{ product['Product'] }}</td>
+                            <td>{{ product['ProductCode'] }}</td>
+                            <td>{{ product['Description'] }}</td>
+                            <td>{{ product['Quality'] }}</td>
+                            <td>{{ product['Colour'] }}</td>
+                            <td>{{ product['Discount'] }}</td>
+                            <td>{{ product['Price'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="divide">
+                <div class="thank">
+                    <br>
+                    <br>
+                    <br>
+                    <h6 style="
+                    margin: 1px;
+                    font-size: 10px;
+                    text-align: left;
+                ">Terms and Conditions</h6>
+                    <p style="
+                    margin: 1px;
+                    font-size: 10px;
+                    text-align: left;
+                ">ஆர்டர் கொடுத்தபின் அட்வான்ஸ் பணம் திரும்ப பெற இயலாது.</p>
+                    <p style="
+                    margin: 1px;
+                    font-size: 10px;
+                    text-align: left;;
+                ">ஆர்டர் தேதியில் இருந்து இரண்டு மாதம் பொருள் வாங்காவிட்டால் நிருவாகம் பொறுப்பாகாது.</p>
+                    <h3 style="text-align: center; border: 1px solid black;">Thank you for purchasing</h3>
+                </div>
+                <div class="thank">
+                    <div class="thanktable">
+                        <table>
+                            <tbody>
+                                <tr><th>Total Sales</th><td>{{ summary['TotalSales'] }}</td></tr>
+                                <tr><th>Discount Amount</th><td>{{ summary['DiscountAmount'] }}</td></tr>
+                                <tr><th>Payable Amount</th><td>{{ summary['PayableAmount'] }}</td></tr>
+                                <tr><th>Cash Amount</th><td>{{ summary['CashAmount'] }}</td></tr>
+                                <tr><th>UPI / CARD Amount</th><td>{{ summary['UPIAmount'] }}</td></tr>
+                                <tr><th>Balance Amount</th><td>{{ summary['BalanceAmount'] }}</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <button onclick="printPage()">Print</button>
+    <script>
+        function printPage() {
+            window.print();
+        }
+    </script>
+
+</body>
+</html>

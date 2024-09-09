@@ -1,0 +1,183 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Stock Entry</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .navbar {
+            width: 10%;
+            background-color: #333;
+            float: right;
+        }
+        .navbar ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 5px;
+            float: right;
+        }
+        .navbar ul li {
+            display: inline;
+            padding: 10px;
+        }
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        .navbar ul li a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <ul>
+            <li><a href="{{ url_for('stock_entry') }}">Back to stock</a></li>
+        </ul>
+    </div>
+    <div class="container">
+        <h1>Update Stock Entry</h1>
+        <form action="{{ url_for('update_entry', id=entry['ID']) }}" method="POST">
+            <input type="text" name="item" value="{{ entry['Item'] }}" required>
+            <input type="number" name="quantity" value="{{ entry['Quantity'] }}" required>
+            <input type="number" name="price" value="{{ entry['Price'] }}" required>
+            <input type="text" name="supplier" value="{{ entry['Supplier'] }}" required>
+            <input type="date" name="date" value="{{ entry['Date'] }}" required>
+            <input type="text" name="remarks" value="{{ entry['Remarks'] }}">
+            <button type="submit">Update Entry</button>
+        </form>
+    </div>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Stock Entry</title>
+    <link rel="icon" type="image/x-icon" href="/static/images/logo1.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .flash-message {
+            color: green;
+            text-align: center;
+            font-weight: bold;
+            transition: opacity 1s ease-out;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input, select, button {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            setTimeout(function() {
+                var flashMessage = document.getElementById('flash-message');
+                if (flashMessage) {
+                    flashMessage.style.opacity = '0';
+                }
+            }, 5000);
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Update Stock Entry</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div id="flash-message" class="flash-message">
+                    {% for category, message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <form action="{{ url_for('update_entry', id=entry['ID']) }}" method="POST">
+            <input type="text" name="brand" value="{{ entry['Brand'] }}" required>
+            <input type="text" name="model_no" value="{{ entry.Model_No }}" required>
+            <select name="gender" required>
+                <option value="">Select Gender</option>
+                <option value="Male" {% if entry['Gender'] == 'Male' %}selected{% endif %}>Male</option>
+                <option value="Female" {% if entry['Gender'] == 'Female' %}selected{% endif %}>Female</option>
+                <option value="Kids" {% if entry['Gender'] == 'Kids' %}selected{% endif %}>kids</option>
+            </select>
+            <input type="text" name="color" value="{{ entry['Color'] }}" required>
+            <input type="number" name="quantity" value="{{ entry['Quantity'] }}" required>
+            <input type="number" name="price" value="{{ entry['Price'] }}" required>
+            <button type="submit">Update Entry</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOME</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="/static/images/logo.svg">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> -->
+     <style>
+        body {
+            width: auto;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            /* background-color: #f4f4f4; */
+        }
+
+
+        .container-2 {
+            max-width: 100%;
+    height:auto;
+    /* margin: 0 auto; */
+    /* padding:100px; */
+    background: #ffffff;
+    border-radius: 8px;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+    /* display: flex; */
+    flex-direction: column;
+    justify-content: center;
+        }
+
+        .header-1 {
+            text-align: center;
+            margin-bottom: 100px;
+        }
+
+        .header-1 h1 {
+            font-size: 2.8rem; /* Larger font size for the heading */
+            color: #5EBC67;
+            margin: 0;
+            word-spacing: 10px;
+            letter-spacing: 1.5px;
+            font-weight: 700; /* Bolder font weight */
+        }
+
+        .header-1 p {
+            font-size: 1.2rem; /* Slightly larger font size */
+            color: #666;
+            margin: 10px 0 0;
+        }
+
+        .img-container {
+            display:flex;
+            height: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 80px;
+        }
+
+        .home-info {
+            background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    width: 180px;
+    text-align: center;
+    padding: 20px;
+        }
+
+        .home-info:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .home-info img {
+            max-width: 100%;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+
+        .home-info img:hover {
+            transform: scale(1.05);
+        }
+
+        .home-info p {
+            margin: 15px 0 0;
+            font-size: 1.1rem; /* Larger font size for better readability */
+            color: #444;
+        }
+
+       @media (max-width: 767px) {
+    .img-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .home-info {
+        width: 90%;
+        margin-bottom: 20px;
+    }
+
+    nav {
+        flex-direction: column;
+        height: auto;
+        padding: 10px;
+    }
+
+    nav .right {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    nav .left img {
+        height: 40px; /* Reduce logo size on mobile */
+    }
+
+    nav .admin .circle {
+        width: 50px; /* Reduce circle size on mobile */
+        height: 50px; /* Reduce circle size on mobile */
+        font-size: 20px; /* Adjust icon size inside circle */
+    }
+
+    nav .admin .dropdown {
+        top: 50px; /* Adjust dropdown position */
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    /* Ensure the menu toggle button is displayed on mobile */
+   
+
+    .nav-links {
+        flex-direction: column;
+        position: absolute;
+        top: 100px;
+        left: 0;
+        width: 100%;
+        background-color: #ffffff;
+        border-top: 1px solid #ddd;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: none; /* Hide links by default on mobile */
+    }
+
+    .nav-links.active {
+        display: flex; /* Show links when active */
+    }
+
+    .nav-links a {
+        padding: 15px 20px;
+        font-size: 16px; /* Adjust font size for mobile */
+        text-align: center;
+    }
+
+    .nav-links a:hover {
+        background-color: #f4f4f4;
+    }
+}
+</style>
+
+</head>
+    <body>
+        {% include 'navbar.html' %}
+        <div class="content">
+            <div class="container-2">
+                <div class="header-1">
+                    <br>
+                    <br>
+                    <h1>SUMAAYA EYE PLUS</h1>
+                    <p><b>Your trusted destination for comprehensive eye care and vision excellence.</b></p>
+                </div>
+                <div class="img-container">
+                    <div class="home-info">
+                        <a href="/billing" class="home-img">
+                            <img src="static/images/bill.png" class="pages hover-img" alt="billing-type">
+                        </a>
+                        <p><b>Customer billing</b></p>
+                    </div>
+                    <div class="home-info">
+                        <a href="/stock_entry" class="home-img">
+                            <img src="static/images/stock2.png" class="pages hover-img" alt="billing-type">
+                        </a>
+                        <p><b>Stock Entry</b></p>
+                    </div>
+                    
+                    <div class="home-info">
+                        <a href="/customer_detail" class="home-img">
+                            <img src="static/images/customer.jpg" class="pages hover-img" alt="billing-type">
+                        </a>
+                        <p><b>Customer Details</b></p>
+                    </div>
+                    <div class="home-info">
+                        <a href="/order" class="home-img">
+                            <img src="static/images/stock1.png" class="pages hover-img" alt="billing-type">
+                        </a>
+                        <p><b>Order Details</b></p>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <!-- <footer>
+            <div class="footer-content">
+                <p>© 2024 Your Company Name. All rights reserved.</p>
+                <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </footer> -->
+        <script>
+            function toggleDropdown() {
+                document.querySelector('.admin').classList.toggle('active');
+            }
+    
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.admin')) {
+                    document.querySelector('.admin').classList.remove('active');
+                }
+            });
+    
+            if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.href);
+            }
+            window.addEventListener('beforeunload', function(event) {
+                window.localStorage.setItem('logout', 'true');
+                event.returnValue = '';
+            });
+            window.onload = function() {
+                if (window.localStorage.getItem('logout')) {
+                    window.localStorage.removeItem('logout');
+                    window.history.forward();
+                }
+            };
+        </script>
+    
+    </body>
+    <script>
+        function toggleDropdown() {
+            document.querySelector('.admin').classList.toggle('active');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.admin')) {
+                document.querySelector('.admin').classList.remove('active');
+            }
+        });
+
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+        window.addEventListener('beforeunload', function(event) {
+            window.localStorage.setItem('logout', 'true');
+            event.returnValue = '';
+        });
+        window.onload = function() {
+            if (window.localStorage.getItem('logout')) {
+                window.localStorage.removeItem('logout');
+                window.history.forward();
+            }
+        };
+    </script>
+</body>
+</html>
